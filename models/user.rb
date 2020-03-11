@@ -17,15 +17,15 @@ class User < ActiveRecord::Base
     else
       if user.password == password
         return {
-          :user_id => user.id
+          :user_id => user,
           :status => "success"
         }.to_json
       else
         return {
-          :user_id => user
+          :user_id => user,
           :status => "wrong password"
         }.to_json
       end
     end
   end
-
+end
