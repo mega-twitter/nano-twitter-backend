@@ -3,12 +3,17 @@ require 'sinatra/activerecord'
 
 class User < ActiveRecord::Base
   include BCrypt
-  # attr_accessor :password
-    
+
+  # associations
+  has_many :follows
+  has_many :followers, through: :follows, source: :users
+
+  # validations
   validates_presence_of :name
   validates_presence_of :email
   validates_length_of :password, minimum: 3
 
+  # methods
   def self.authenticate(user_email, password)
     user = find_by(email: user_email)
     if user.nil?

@@ -10,6 +10,7 @@ require 'json'
 
 # app.rb
 require 'sinatra'
+require './models'
 
 get '/' do
   "Hello Sinatra!"
