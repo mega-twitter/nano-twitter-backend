@@ -1,6 +1,7 @@
 require 'faker'
 require 'random/password'
 require 'random/password'
+require 'csv'
 include RandomPassword
 
 User.delete_all
