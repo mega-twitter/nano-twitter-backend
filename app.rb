@@ -8,13 +8,6 @@ require_relative 'services/user_service.rb'
 require_relative 'services/helper_services.rb'
 require 'json'
 
-get '/' do
-    erb :home
-end
-
-get '/signup' do
-	erb :signup
-end	
 
 # sign up： create a new user
 post '/users/signup' do
