@@ -8,6 +8,12 @@ require_relative 'services/user_service.rb'
 require_relative 'services/helper_services.rb'
 require 'json'
 
+# app.rb
+require 'sinatra'
+
+get '/' do
+  "Hello Sinatra!"
+end
 
 # sign up： create a new user
 post '/users/signup' do
