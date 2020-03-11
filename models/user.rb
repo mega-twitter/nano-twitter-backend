@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
     else
       if user.password == password
         return {
-          :user_id => user
+          :user_id => user.id
           :status => "success"
         }.to_json
       else
