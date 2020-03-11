@@ -1,0 +1,22 @@
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['DB_HOST'] %>
+  port: 25060
+  username: doadmin
+  password: <%= ENV['DB_PASSWORD'] %>
+  pool: 2
+
+
+development:
+  <<: *default
+  database: nano-twitter-dev
+
+test:
+  <<: *default
+  database: nano-twitter-test
+
+production:
+  <<: *default
+  database: nano-twitter-prod
