@@ -16,12 +16,16 @@ jobs:
         ruby-version: 2.7.0
         
     - name: Install PostgreSQL
-      run: |
-        sudo apt-get -yqq install libpq-dev
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: '11'
+        postgresql user: 'doadmin'
+        postgresql password: 'qwerty'  
       
     - name: Run Tests
       env:
         DB_HOST: localhost
+        DB_PASSWORD: 'qwerty' 
       run: |
         gem install bundler
         bundle install
