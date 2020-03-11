@@ -20,6 +20,8 @@ jobs:
         sudo apt-get -yqq install libpq-dev
       
     - name: Run Tests
+      env:
+        DB_HOST: localhost
       run: |
         gem install bundler
         bundle install
