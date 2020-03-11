@@ -9,10 +9,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    
+    - name: Set up Ruby 2.7
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7.0
+        
+    - name: Install PostgreSQL
+      run: |
+        sudo apt-get -yqq install libpq-dev
       
     - name: Run Tests
+      env:
+        PGHOST: localhost
+        PGUSER: postgres
       run: |
         gem install bundler
+        bundle install
         bundle exec rake test
 
     - name: (Service) Copy file via scp
