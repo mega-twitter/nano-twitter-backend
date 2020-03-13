@@ -10,7 +10,7 @@ require 'json'
 
 # app.rb
 require 'sinatra'
-require './models'
+Dir["models/*.rb"].each {|file| require_relative file }
 
 get '/' do
   @users = User.all
