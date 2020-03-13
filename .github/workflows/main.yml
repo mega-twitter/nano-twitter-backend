@@ -6,6 +6,18 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        - 25060:25060
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
     - uses: actions/checkout@v1
@@ -14,18 +26,11 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.7.0
-        
-    - name: Install PostgreSQL
-      uses: Harmon758/postgresql-action@v1.0.0
-      with:
-        postgresql version: '11'
-        postgresql user: 'doadmin'
-        postgresql password: 'qwerty'  
       
     - name: Run Tests
       env:
-        DB_HOST: localhost
-        DB_PASSWORD: 'qwerty' 
+        DB_HOST: postgres
+        DB_PASSWORD: postgres
       run: |
         gem install bundler
         bundle install
