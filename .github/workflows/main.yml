@@ -31,12 +31,11 @@ jobs:
       env:
         DB_HOST: localhost
         DB_PASSWORD: postgres
-        RACK_ENV: development
       run: |
         gem install bundler
         bundle install
-        bundle exec rake db:create
-        bundle exec rake db:migrate
+        bundle exec rake db:create RACK_ENV=development
+        bundle exec rake db:migrate RACK_ENV=development
         bundle exec rake test
 
     - name: (Service) Copy file via scp
