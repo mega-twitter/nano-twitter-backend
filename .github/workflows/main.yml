@@ -31,6 +31,7 @@ jobs:
       env:
         DB_HOST: localhost
         DB_PASSWORD: postgres
+        RACK_ENV: development
       run: |
         gem install bundler
         bundle install
