@@ -29,7 +29,7 @@ jobs:
       
     - name: Run Tests
       env:
-        DB_HOST: postgres
+        DB_HOST: localhost
         DB_PASSWORD: postgres
       run: |
         gem install bundler
