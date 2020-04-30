@@ -1,4 +1,3 @@
-
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -11,10 +10,16 @@ default: &default
 
 development:
   <<: *default
+#  adapter: postgresql
+#  encoding: unicode
+#  pool: 5
   database: nano-twitter-dev
 
 test:
   <<: *default
+#  adapter: postgresql
+#  encoding: unicode
+#  pool: 5
   database: nano-twitter-test
 
 production:

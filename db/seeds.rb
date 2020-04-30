@@ -1,11 +1,15 @@
+require './models/follow.rb'
+require './models/tag.rb'
+require './models/tweet.rb'
+require './models/tweettag.rb'
+
 require 'faker'
-require 'random/password'
 require 'random/password'
 require 'csv'
 include RandomPassword
 
 User.delete_all
-Comment.delete_all
+# Comment.delete_all
 Follow.delete_all
 Tag.delete_all
 Tweet.delete_all
@@ -26,37 +30,16 @@ user_num.times do
                password_confirmation: password)
 end
 
-# create tweet for each user
-User.all.each do |user|
-  rand(tweet_max).times do
-    tag = ["", "#"+Faker::Lorem.word].sample
-    tweet = Tweet.create!(content: Faker::Lorem.paragraph + tag,
-                          user_id: user.id)
-    # if tweet has a tag, create corresponding tag and tweettag object
-    if !tag.empty?
-      begin
-        hashtag = Tag.create!(hashtag: tag)
-        Tweettag.create!(tag_id: hashtag.id,
-                         tweet_id: tweet.id)
-      rescue
-        # do nothing
-      end
-    end
-  end
+
+users = User.order(:created_at).take(6)
+5.times do
+  content = Faker::Lorem.sentence(word_count: 5)
+  users.each { |user| user.tweets.create!(content: content) }
 end
 
-# create follower followee relationship
-User.all.each do |user|
-  rand(follower_max).times do
-    follower = User.all.sample
-    if user == follower
-      next
-    else
-      Follow.create!(follower_user_id: follower.id,
-                     followee_user_id: user.id
-      )
-    end
-  end
-end
-
-
+users = User.all
+user  = users.first
+following = users[2..50]
+followers = users[3..40]
+following.each { |followed| user.follow(followed) }
+followers.each { |follower| follower.follow(user) }

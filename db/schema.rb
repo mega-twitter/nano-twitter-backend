@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_13_201421) do
+ActiveRecord::Schema.define(version: 2020_03_18_031941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,10 +24,13 @@ ActiveRecord::Schema.define(version: 2020_02_13_201421) do
   end
 
   create_table "follows", force: :cascade do |t|
-    t.integer "follower_user_id"
-    t.string "followee_user_id"
+    t.integer "follower_id"
+    t.integer "followed_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["followed_id"], name: "index_follows_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_follows_on_follower_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -37,10 +40,12 @@ ActiveRecord::Schema.define(version: 2020_02_13_201421) do
   end
 
   create_table "tweets", force: :cascade do |t|
-    t.string "content"
+    t.text "content"
     t.date "create_time"
+    t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "created_at"], name: "index_tweets_on_user_id_and_created_at"
   end
 
   create_table "tweettags", force: :cascade do |t|
@@ -48,13 +53,14 @@ ActiveRecord::Schema.define(version: 2020_02_13_201421) do
     t.integer "tweet_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["tag_id", "tweet_id"], name: "index_tweettags_on_tag_id_and_tweet_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "self_intro"
-    t.string "password"
+    t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
