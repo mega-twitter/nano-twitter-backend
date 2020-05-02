@@ -21,3 +21,14 @@ get '/search_user' do
   status 200
   @result_user.to_json
 end
+
+get '/test/status' do
+  user_count = User.count
+  tweet_count = Tweet.count
+  follow_count = Follow.count
+
+  "<h3> Count users: #{user_count}</h3>
+  <h3> Count tweets: #{tweet_count}</h3>
+  <h3> Count follows: #{follow_count}</h3>"
+
+end
