@@ -7,8 +7,9 @@ require_relative './models/user'
 
 get '/search_tweet' do 
   @key_word = params[:search].downcase
+  @offset = params[:offset]
   sql = "SELECT user_id, content, created_at FROM tweets, plainto_tsquery('#{@key_word}') AS q WHERE (tsv_tweet @@ q) 
-  ORDER BY tweets.created_at DESC"
+  ORDER BY tweets.created_at DESC LIMIT 10 OFFSET #{@offset}"
   @result_tweet = ActiveRecord::Base.connection.execute(sql)
   status 200
   @result_tweet.to_json
