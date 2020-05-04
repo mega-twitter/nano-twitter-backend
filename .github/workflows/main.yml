@@ -59,3 +59,4 @@ jobs:
         script: |
           su - rails -c "cd /home/rails/nano_twitter_service && bundle"
           sudo systemctl restart rails.service
+          sudo systemctl restart rails2.service
