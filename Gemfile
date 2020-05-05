@@ -9,6 +9,7 @@ gem "activerecord"
 gem "sinatra-activerecord"
 gem "rake"
 gem "puma"
+gem "redis"
 
 # util
 gem "bcrypt"
