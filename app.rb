@@ -20,11 +20,14 @@ get '/search_tweet' do
 redis_key = "search_" + @key_word + "-" + @page
 
   if !settings.redis.exists(redis_key)
-    sql = "SELECT user_id, content, created_at FROM tweets, plainto_tsquery('#{@key_word}') AS q WHERE (tsv_tweet @@ q) 
+    sql = "SELECT name, content, tweets.created_at FROM 
+     tweets inner join users on tweets.user_id = users.id, 
+    plainto_tsquery('#{@key_word}') AS q WHERE (tsv_tweet @@ q) 
   ORDER BY tweets.created_at DESC LIMIT 10 OFFSET #{@offset}"
     @result_tweet = ActiveRecord::Base.connection.execute(sql)
     @result_tweet.each do |tweet|
       settings.redis.rpush(redis_key, tweet.to_json)
+      settings.redis.expire(redis_key, 100)
     end
     status 200
   else
@@ -34,6 +37,23 @@ redis_key = "search_" + @key_word + "-" + @page
   end
   @result_tweet.to_json
 end
+
+get '/search_tweet_count' do
+  @key_word = params[:search].downcase
+  redis_key = "search_count_" + @key_word
+
+  if !settings.redis.exists(redis_key)
+    sql = "SELECT count(*) FROM tweets WHERE (tsv_tweet @@ plainto_tsquery('#{@key_word}')) "
+    @count = ActiveRecord::Base.connection.execute(sql)
+    settings.redis.set(redis_key, @count.to_json)
+    settings.redis.expire(redis_key, 100)
+  else
+    @count = settings.redis.get(redis_key)
+    @count = JSON.parse(@count)
+  end 
+  @count.to_json
+end
+
 
 get '/search_user' do 
   @key_word = params[:search].downcase
