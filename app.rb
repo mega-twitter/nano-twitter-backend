@@ -20,7 +20,6 @@ get '/search_tweet' do
 redis_key = "search_" + @key_word + "-" + @page
 
   if !settings.redis.exists(redis_key)
-    puts redis_key
     sql = "SELECT user_id, content, created_at FROM tweets, plainto_tsquery('#{@key_word}') AS q WHERE (tsv_tweet @@ q) 
   ORDER BY tweets.created_at DESC LIMIT 10 OFFSET #{@offset}"
     @result_tweet = ActiveRecord::Base.connection.execute(sql)
@@ -29,9 +28,9 @@ redis_key = "search_" + @key_word + "-" + @page
     end
     status 200
   else
-    puts "in redis!"
     @tweet_items = settings.redis.lrange(redis_key, 0, -1)
     @result_tweet = @tweet_items.map{|tweet| JSON.parse(tweet)}
+    settings.redis.expire(redis_key, 100)
   end
   @result_tweet.to_json
 end
