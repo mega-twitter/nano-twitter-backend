@@ -8,6 +8,10 @@ require_relative './models/user'
 
 set :redis, Redis.new(host: "157.245.114.60", port: 6379)
 
+get '/' do
+  status 200
+end
+
 get '/search_tweet' do 
   @key_word = params[:search].downcase
   @page = params[:page]
