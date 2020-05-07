@@ -58,5 +58,5 @@ jobs:
         KEY: ${{ secrets.API_SSHKEY }}
         script: |
           su - rails -c "cd /home/rails/nano_twitter_service && bundle"
-          sudo systemctl restart rails.service
-          sudo systemctl restart rails2.service
+          sudo systemctl restart search.service
+          sudo systemctl restart search2.service
